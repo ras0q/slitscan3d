@@ -1,34 +1,63 @@
-import { useState } from 'react'
+import { Environment, OrbitControls } from '@react-three/drei'
+import { Canvas, RootState, useFrame } from '@react-three/fiber'
+import { Suspense, useMemo, useState } from 'react'
+import * as THREE from 'three'
 import './App.css'
-import reactLogo from './assets/react.svg'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const createdHandler = (state: RootState) => {
+    state.gl.localClippingEnabled = true
+  }
 
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
+    <Canvas
+      camera={{ fov: 50, position: [10, 0, 0] }}
+      dpr={[1, 2]}
+      shadows
+      onCreated={createdHandler}
+    >
+      <OrbitControls />
+      <ambientLight intensity={0.1} />
+      <directionalLight
+        position={[5, 5, 5]}
+        intensity={1}
+        shadowMapWidth={2048}
+        shadowMapHeight={2048}
+        castShadow
+      />
+
+      <Suspense fallback={null}>
+        <Clipper />
+        <Environment preset="city" />
+      </Suspense>
+    </Canvas>
   )
 }
 
 export default App
+
+const Clipper = () => {
+  const [normX, setNormX] = useState(0)
+
+  const clipPlanes = useMemo(() => {
+    return [new THREE.Plane(new THREE.Vector3(-1, 0, normX), 0)]
+  }, [normX])
+
+  useFrame(({ clock }) => {
+    setNormX(Math.cos(clock.getElapsedTime()))
+  })
+
+  return (
+    <mesh castShadow>
+      <boxGeometry args={[10, 10, 10]} />
+      <meshStandardMaterial
+        color="goldenrod"
+        metalness={1}
+        roughness={0}
+        clippingPlanes={clipPlanes}
+        clipShadows
+        side={THREE.DoubleSide}
+      />
+    </mesh>
+  )
+}
