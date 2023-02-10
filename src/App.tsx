@@ -1,8 +1,9 @@
-import { Environment, OrbitControls } from '@react-three/drei'
+import { OrbitControls, useVideoTexture } from '@react-three/drei'
 import { Canvas, RootState, useFrame } from '@react-three/fiber'
 import { Suspense, useMemo, useState } from 'react'
 import * as THREE from 'three'
 import './App.css'
+import sampleVideo from './assets/sample-from-pexels.mp4'
 
 function App() {
   const createdHandler = (state: RootState) => {
@@ -28,7 +29,6 @@ function App() {
 
       <Suspense fallback={null}>
         <Clipper />
-        <Environment preset="city" />
       </Suspense>
     </Canvas>
   )
@@ -47,13 +47,13 @@ const Clipper = () => {
     setNormX(Math.cos(clock.getElapsedTime()))
   })
 
+  const videoTexture = useVideoTexture(sampleVideo, {})
+
   return (
     <mesh castShadow>
       <boxGeometry args={[10, 10, 10]} />
       <meshStandardMaterial
-        color="goldenrod"
-        metalness={1}
-        roughness={0}
+        map={videoTexture}
         clippingPlanes={clipPlanes}
         clipShadows
         side={THREE.DoubleSide}
