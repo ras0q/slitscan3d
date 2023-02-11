@@ -1,4 +1,4 @@
-import { OrbitControls, useVideoTexture } from '@react-three/drei'
+import { OrbitControls } from '@react-three/drei'
 import { Canvas, RootState, useFrame, useLoader } from '@react-three/fiber'
 import { Suspense, useMemo, useState } from 'react'
 import * as THREE from 'three'
@@ -12,7 +12,8 @@ function App() {
 
   return (
     <Canvas
-      camera={{ fov: 50, position: [10, 0, 0] }}
+      orthographic
+      camera={{ position: [10, 0, 0], zoom: 10 }}
       dpr={[1, 2]}
       shadows
       onCreated={createdHandler}
