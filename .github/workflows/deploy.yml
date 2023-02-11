@@ -6,20 +6,15 @@ on:
       - main
 
 jobs:
-  generate-frames:
-    name: Generate frames
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - run: sudo apt-get install ffmpeg
-      - run: ./scripts/generate-frames.sh
-
   build:
     name: Build
     runs-on: ubuntu-latest
-    needs: generate-frames
     steps:
       - uses: actions/checkout@v2
+      - name: Generate frames
+        run: |
+          sudo apt-get install ffmpeg &&
+          ./scripts/generate-frames.sh
       - uses: actions/setup-node@v3
         with:
           node-version-file: "package.json"
