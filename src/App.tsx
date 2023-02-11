@@ -13,7 +13,7 @@ function App() {
   return (
     <Canvas
       orthographic
-      camera={{ position: [10, 2, -2], zoom: 10 }}
+      camera={{ position: [2, 2, 10], zoom: 10 }}
       dpr={[1, 2]}
       shadows
       onCreated={createdHandler}
@@ -41,16 +41,18 @@ const Clipper = () => {
   const [normX, setNormX] = useState(0)
   const allTextures = useMemo(() => frames, [])
   const frameLimit = useMemo(() => 100, [])
+  const [width, height, depth] = useMemo(() => [10, 10, 10], [])
   const [textures, setTextures] = useState(allTextures.slice(0, frameLimit))
 
   const clipPlanes = useMemo(() => {
-    return [new THREE.Plane(new THREE.Vector3(-1, 0, normX), 0)]
+    return [new THREE.Plane(new THREE.Vector3(normX, 0, -1), 0)]
   }, [normX])
 
   useFrame(({ clock }) => {
     setNormX(Math.cos(clock.getElapsedTime()))
 
-    const frameIndex = Math.floor(clock.getElapsedTime() * 30) % allTextures.length
+    const frameIndex =
+      Math.floor(clock.getElapsedTime() * 30) % allTextures.length
     const restIndex = frameIndex + frameLimit - allTextures.length
     const newFrames =
       restIndex > 0
@@ -67,9 +69,9 @@ const Clipper = () => {
         <mesh
           key={i.toString()}
           castShadow
-          position={[i * (10 / textures.length), 0, 0]}
+          position={[0, 0, i * (depth / textures.length)]}
         >
-          <boxGeometry args={[10, 10, 10]} />
+          <boxGeometry args={[width, height, depth]} />
           <meshStandardMaterial
             map={texture}
             clippingPlanes={clipPlanes}
