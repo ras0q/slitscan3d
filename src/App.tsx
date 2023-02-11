@@ -58,7 +58,7 @@ const Clipper = () => {
     <group>
       {textures.map((texture, i) => (
         <mesh key={i} castShadow position={[i * (10 / textures.length), 0, 0]}>
-          <boxGeometry args={[10 / textures.length, 10, 10]} />
+          <boxGeometry args={[10, 10, 10]} />
           <meshStandardMaterial
             map={texture}
             clippingPlanes={clipPlanes}
