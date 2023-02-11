@@ -50,7 +50,7 @@ const Clipper = () => {
   useFrame(({ clock }) => {
     setNormX(Math.cos(clock.getElapsedTime()))
 
-    const frameIndex = Math.floor(clock.getElapsedTime() * 30)
+    const frameIndex = Math.floor(clock.getElapsedTime() * 30) % allTextures.length
     const restIndex = frameIndex + frameLimit - allTextures.length
     const newFrames =
       restIndex > 0
