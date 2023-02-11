@@ -11,27 +11,29 @@ function App() {
   }
 
   return (
-    <Canvas
-      orthographic
-      camera={{ position: [2, 2, 10], zoom: 10 }}
-      dpr={[1, 2]}
-      shadows
-      onCreated={createdHandler}
-    >
-      <OrbitControls />
-      <ambientLight intensity={0.1} />
-      <directionalLight
-        position={[5, 5, 5]}
-        intensity={1}
-        shadowMapWidth={2048}
-        shadowMapHeight={2048}
-        castShadow
-      />
+    <div className="App" style={{ width: '80vw', height: '80vh' }}>
+      <Canvas
+        orthographic
+        camera={{ position: [2, 2, 10], zoom: 10 }}
+        dpr={[1, 2]}
+        shadows
+        onCreated={createdHandler}
+      >
+        <OrbitControls />
+        <ambientLight intensity={0.1} />
+        <directionalLight
+          position={[5, 5, 5]}
+          intensity={1}
+          shadowMapWidth={2048}
+          shadowMapHeight={2048}
+          castShadow
+        />
 
-      <Suspense fallback={null}>
-        <Clipper />
-      </Suspense>
-    </Canvas>
+        <Suspense fallback={null}>
+          <Clipper />
+        </Suspense>
+      </Canvas>
+    </div>
   )
 }
 
@@ -41,7 +43,7 @@ const Clipper = () => {
   const [normX, setNormX] = useState(0)
   const allTextures = useMemo(() => frames, [])
   const frameLimit = useMemo(() => 100, [])
-  const [width, height, depth] = useMemo(() => [10, 10, 10], [])
+  const [width, height, depth] = useMemo(() => [25, 25, 25], [])
   const [textures, setTextures] = useState(allTextures.slice(0, frameLimit))
 
   const clipPlanes = useMemo(() => {
