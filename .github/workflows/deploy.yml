@@ -11,10 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Generate frames
-        run: |
-          sudo apt-get install ffmpeg &&
-          ./scripts/generate-frames.sh
+      - uses: awalsh128/cache-apt-pkgs@v1
+        with:
+          packages: ffmpeg
+          version: 1.0
+      - run: ./scripts/generate-frames.sh
       - uses: actions/setup-node@v3
         with:
           node-version-file: "package.json"
