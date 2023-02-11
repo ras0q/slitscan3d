@@ -18,13 +18,12 @@ jobs:
       - run: ./scripts/generate-frames.sh
       - uses: actions/setup-node@v3
         with:
-          node-version-file: "package.json"
-          cache: "yarn"
+          node-version-file: ./package.json
+          cache: yarn
       - run: yarn install
       - run: yarn build
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-pages-artifact@v1
         with:
-          name: dist
           path: ./dist
 
   deploy:
@@ -36,9 +35,5 @@ jobs:
       id-token: write
     if: github.ref == 'refs/heads/main'
     steps:
-      - uses: actions/download-artifact@v3
-        with:
-          name: dist
-          path: ./dist
       - uses: actions/deploy-pages@v1
         id: deployment
