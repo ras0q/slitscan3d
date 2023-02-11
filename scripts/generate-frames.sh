@@ -1,5 +1,6 @@
 #!/bin/sh
 
+SRC_FILE=${1:-./src/assets/sample-from-adobe.mp4}
 DIST_DIR=./src/generated/frames
 
 if [ -d "$DIST_DIR" ]; then
@@ -9,7 +10,7 @@ if [ -d "$DIST_DIR" ]; then
 fi
 
 echo "Generating frames from video"
-ffmpeg -i ./src/assets/sample-from-adobe.mp4 -r 30 -f image2 $DIST_DIR/frame%05d.png
+ffmpeg -i $SRC_FILE -r 30 -f image2 $DIST_DIR/frame%05d.png
 
 echo "Generating index.ts"
 FILES=$(ls $DIST_DIR | sed 's/.png//g')
