@@ -13,7 +13,7 @@ function App() {
   return (
     <Canvas
       orthographic
-      camera={{ position: [10, 0, 0], zoom: 10 }}
+      camera={{ position: [10, 2, -2], zoom: 10 }}
       dpr={[1, 2]}
       shadows
       onCreated={createdHandler}
