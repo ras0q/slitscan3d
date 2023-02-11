@@ -6,8 +6,8 @@ DIST_DIR=./src/generated/frames
 if [ -d "$DIST_DIR" ]; then
   echo "Removing $DIST_DIR"
   rm -rf $DIST_DIR
-  mkdir -p $DIST_DIR
 fi
+mkdir -p $DIST_DIR
 
 echo "Generating frames from video"
 ffmpeg -i $SRC_FILE -r 30 -f image2 $DIST_DIR/frame%05d.png
