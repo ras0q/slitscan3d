@@ -616,8 +616,8 @@ __metadata:
   linkType: hard
 
 "@react-three/drei@npm:^9.56.22":
-  version: 9.56.22
-  resolution: "@react-three/drei@npm:9.56.22"
+  version: 9.56.25
+  resolution: "@react-three/drei@npm:9.56.25"
   dependencies:
     "@babel/runtime": "npm:^7.11.2"
     "@react-spring/three": "npm:^9.3.1"
@@ -647,13 +647,13 @@ __metadata:
   peerDependenciesMeta:
     react-dom:
       optional: true
-  checksum: 8d35552805797509b852a1f31d4f8386323c7946812a2f8e08a4528b0177665a304f55f0b8fb1dc4ea63f551d222e16313a2eb3d675f7f9e667a723e87390cae
+  checksum: 4185106ab1e1761df2d58cd46b11aef0afa80607a5c6ea51190cb03685f238adc51dd61f5878e43f0dbf23c5cf274b293e38673487644eebbb94af5c0e8fcb11
   languageName: node
   linkType: hard
 
 "@react-three/fiber@npm:^8.11.0":
-  version: 8.11.0
-  resolution: "@react-three/fiber@npm:8.11.0"
+  version: 8.11.2
+  resolution: "@react-three/fiber@npm:8.11.2"
   dependencies:
     "@babel/runtime": "npm:^7.17.8"
     "@types/react-reconciler": "npm:^0.26.7"
@@ -682,7 +682,7 @@ __metadata:
       optional: true
     react-native:
       optional: true
-  checksum: e3356875d133a16d7926541b6cfb4ccd3268dd290eddc0edc4c0409068190e4fac94106dde450f302a33a2eba7d543f8c1f07aa69ab3a1fa99fea76f54646a7d
+  checksum: a3ea2d9581e06c9267e4db6014adcd398137fd84092af41388b9d7ef5692903daee43831e185facbedb9f23f6fa915c942855f3f8d8c9f94c97951de8c9c9204
   languageName: node
   linkType: hard
 
@@ -750,11 +750,11 @@ __metadata:
   linkType: hard
 
 "@types/react-dom@npm:^18.0.10":
-  version: 18.0.10
-  resolution: "@types/react-dom@npm:18.0.10"
+  version: 18.0.11
+  resolution: "@types/react-dom@npm:18.0.11"
   dependencies:
     "@types/react": "npm:*"
-  checksum: 2c191e8dbe394e0690f8e5caacdb5ef710491478a95ceefc97cc8697e6e7e02c6a2fc3562b37791f92a4c08a6a82dd9dc57d42e8f98bce5f7e7110965845c068
+  checksum: 429119548045bb8ca6f34522c2698973fb92a0ebb1f1b2afa061e41ae9d091d10d0cc9bbbfd52b3cfe948486898cfaaf29d3721650a6d52dc0d3ab81c0245b82
   languageName: node
   linkType: hard
 
@@ -777,13 +777,13 @@ __metadata:
   linkType: hard
 
 "@types/react@npm:*, @types/react@npm:^18.0.27":
-  version: 18.0.27
-  resolution: "@types/react@npm:18.0.27"
+  version: 18.0.28
+  resolution: "@types/react@npm:18.0.28"
   dependencies:
     "@types/prop-types": "npm:*"
     "@types/scheduler": "npm:*"
     csstype: "npm:^3.0.2"
-  checksum: 75c0b64773dc36bd094b3cc7fff5fb4cc385f60d7696bec2e0243806de69f2a2e35bec25d31f51bbbd6681639d8682a2d6eb94379759c70afc2f3ef5f87927b5
+  checksum: 5a43d1f81da064da91d0be3a676fbd2380d3bdff7491e0dae49e9ccdecf8fdf07e1bf7054d5fdd79266bf90a813384bd6898c678aca44e041a9e19df5fa690b3
   languageName: node
   linkType: hard
 
@@ -1005,9 +1005,9 @@ __metadata:
   linkType: hard
 
 "caniuse-lite@npm:^1.0.30001449":
-  version: 1.0.30001451
-  resolution: "caniuse-lite@npm:1.0.30001451"
-  checksum: c23513d8c93b4fd849b3a418ab13ef3977437f5f21ebcf099671285f6cf6d245e2456829d9c443458d1b7784efa434ff67ba9d6722b68b5d78bdd35898369460
+  version: 1.0.30001456
+  resolution: "caniuse-lite@npm:1.0.30001456"
+  checksum: 5ae63db4c868c2e80fcdb026adcef229c3beafee691c33ca1ebc5d100f554166f055d8bbb1a32d35633e916dbc3838a456273379f5f482df155b21af341e7bb5
   languageName: node
   linkType: hard
 
@@ -1137,11 +1137,11 @@ __metadata:
   linkType: hard
 
 "detect-gpu@npm:^5.0.10":
-  version: 5.0.10
-  resolution: "detect-gpu@npm:5.0.10"
+  version: 5.0.11
+  resolution: "detect-gpu@npm:5.0.11"
   dependencies:
     webgl-constants: "npm:^1.1.1"
-  checksum: 89e500e3c77ae1a7207bc8cd17f9eb66d9388ea66c54a3057d536e576242d5209b05cc4e7159e4a897c5461ea72206fd6c7096b5b5d4bbe41ed9fecc7e4e4eb3
+  checksum: fc2cbc0b171593d8c26f7824050996dd3477f24381b9b81d3dd1c946e3bfbc85d460b381c096365e07a584d1e5933e2e5823a0e99f71c68275667c03e4714bba
   languageName: node
   linkType: hard
 
@@ -1153,9 +1153,9 @@ __metadata:
   linkType: hard
 
 "electron-to-chromium@npm:^1.4.284":
-  version: 1.4.293
-  resolution: "electron-to-chromium@npm:1.4.293"
-  checksum: ec570956a7f0650e9f98ea063a071aa4119b34e390d5750ad355d68a428b2bb611cc1c9ee274d2d3fa5cc7d6c4ffe8d058e3b7161d5b40e20069c83196a54362
+  version: 1.4.302
+  resolution: "electron-to-chromium@npm:1.4.302"
+  checksum: c8a43f5f487ec41ed63b5e0330a0cd69a2ebfd565f514515f2579f00f063acda50b5c7a29b4fc509b705699f2f9e03db7a70395dd9d85c5aa41b73cbf71b8547
   languageName: node
   linkType: hard
 
@@ -1645,9 +1645,9 @@ __metadata:
   linkType: hard
 
 "lru-cache@npm:^7.7.1":
-  version: 7.14.1
-  resolution: "lru-cache@npm:7.14.1"
-  checksum: e4c8c073d9632585dde73bb2c857c22866f61f3ee75fea6e1dcc5412b59eca4107bc511c4b4ae4e038c7f59a15488b67448b24a3a1154def46c8ab1d07935d85
+  version: 7.16.1
+  resolution: "lru-cache@npm:7.16.1"
+  checksum: 5619d4ffd5a45fb68a02bef904d6d72427c54a7a6a051126797eaa20f7429c17e681fe9cdd0de12b69a737e5f0df817f626ca5916f50e85141865dcf075873ae
   languageName: node
   linkType: hard
 
@@ -2152,8 +2152,8 @@ __metadata:
   linkType: hard
 
 "rollup@npm:^3.10.0":
-  version: 3.14.0
-  resolution: "rollup@npm:3.14.0"
+  version: 3.16.0
+  resolution: "rollup@npm:3.16.0"
   dependencies:
     fsevents: "npm:~2.3.2"
   dependenciesMeta:
@@ -2161,7 +2161,7 @@ __metadata:
       optional: true
   bin:
     rollup: dist/bin/rollup
-  checksum: 9fa7c283f048e6709d6b452cb7d66b8186e6859cdb0fe2d3268ff36fc9e85aeaaf4ffdb710ab03b01e1016262e7614f63e83aba9c7c2732dbdb9ea390b637d2b
+  checksum: b20588460f28f4788261cf323e6dd39ba658ddba1669af54c9d894cee07fb25daa0d91c449fcfddecf70dccc1839929cb3ed31c4e3ae7623f8a8a69c01b037f7
   languageName: node
   linkType: hard
 
@@ -2553,8 +2553,8 @@ __metadata:
   linkType: hard
 
 "vite@npm:^4.1.0":
-  version: 4.1.1
-  resolution: "vite@npm:4.1.1"
+  version: 4.1.2
+  resolution: "vite@npm:4.1.2"
   dependencies:
     esbuild: "npm:^0.16.14"
     fsevents: "npm:~2.3.2"
@@ -2586,7 +2586,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: 1214e901a0836cfad0b20abe3ba03684c5c6d1a5d486e7ddd55e56e2c786677cecd7c1822b97540a001867164a9e38e52aa5c14480cdc50afd2561ed4bc2f89b
+  checksum: a1a4cd24b4d8750fba06aac7b12ab84304d3563b6fe3cfb5fc0b5f6276cc0fd251292a445f8d58d79bd39c0d8343d8c4b7fa92c4f8a79fb48869f99e62d365c4
   languageName: node
   linkType: hard
 
