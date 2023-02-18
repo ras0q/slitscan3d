@@ -22,6 +22,6 @@ ras0q/slitscan3d is powered by
 
 [ffmpeg](https://ffmpeg.org/) is required.
 
-1. `./scripts/generate-frames.sh`
+1. `yarn generate-frames`
 2. `yarn install`
 3. `yarn dev`
