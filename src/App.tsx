@@ -40,21 +40,19 @@ function App() {
 export default App
 
 const Clipper = () => {
-  const [normX, setNormX] = useState(0)
   const allTextures = useMemo(() => frames, [])
   const frameLimit = useMemo(() => 100, [])
   const [width, height, depth] = useMemo(() => [25, 25, 25], [])
   const [textures, setTextures] = useState(allTextures.slice(0, frameLimit))
 
-  const clipPlanes = useMemo(() => {
-    return [new THREE.Plane(new THREE.Vector3(normX, 0, -1), 0)]
-  }, [normX])
+  const clipVec = useMemo(() => new THREE.Vector3(0, 0, -1), [])
+  const clipPlanes = useMemo(() => [new THREE.Plane(clipVec, 0)], [clipVec])
 
   useFrame(({ clock }) => {
-    setNormX(Math.cos(clock.getElapsedTime()))
+    const elapsed = clock.getElapsedTime()
+    clipVec.set(Math.cos(elapsed), 0, -1)
 
-    const frameIndex =
-      Math.floor(clock.getElapsedTime() * 30) % allTextures.length
+    const frameIndex = Math.floor(elapsed * 30) % allTextures.length
     const restIndex = frameIndex + frameLimit - allTextures.length
     const newFrames =
       restIndex > 0
