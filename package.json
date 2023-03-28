@@ -9,8 +9,7 @@
     "preview": "vite preview",
     "lint": "rome check .",
     "lint:fix": "rome check . --apply",
-    "format": "rome format . --write",
-    "generate-frames": "sh ./scripts/generate-frames.sh"
+    "format": "rome format . --write"
   },
   "dependencies": {
     "@react-three/drei": "^9.56.22",
