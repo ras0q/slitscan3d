@@ -22,12 +22,67 @@ const createVideo = (src: string) => {
 function App() {
   const [video, setVideo] = useState(createVideo(sampleVideo))
 
+  const [x, setX] = useState(1)
+  const [y, setY] = useState(0)
+  const [z, setZ] = useState(-1)
+  const [d, setD] = useState(0)
+
   const createdHandler = (state: RootState) => {
     state.gl.localClippingEnabled = true
   }
 
   return (
     <div className="App" style={{ width: '80vw', height: '80vh' }}>
+      <div>
+        <label htmlFor="x">x</label>
+        <input
+          type="range"
+          name="x"
+          min={-1}
+          max={1}
+          step={0.1}
+          value={x}
+          onChange={(e) => {
+            setX(Number(e.target.value))
+          }}
+        />
+      </div>
+      <div>
+        <label htmlFor="y">y</label>
+        <input
+          type="range"
+          name="y"
+          min={-1}
+          max={1}
+          step={0.1}
+          value={y}
+          onChange={(e) => setY(Number(e.target.value))}
+        />
+      </div>
+      <div>
+        <label htmlFor="z">z</label>
+        <input
+          type="range"
+          name="z"
+          min={-1}
+          max={1}
+          step={0.1}
+          value={z}
+          onChange={(e) => setZ(Number(e.target.value))}
+        />
+      </div>
+      <div>
+        <label htmlFor="d">d</label>
+        <input
+          type="range"
+          name="d"
+          min={-30}
+          max={30}
+          value={d}
+          onChange={(e) => setD(Number(e.target.value))}
+        />
+      </div>
+
       <input
         type="file"
         accept="video/*"
@@ -61,11 +116,12 @@ function App() {
 
         <Suspense fallback={null}>
           <Clipper
+            video={video}
             width={25}
             height={25}
             depth={25}
             frameLimit={100}
-            video={video}
+            clipPlanes={[new THREE.Plane(new THREE.Vector3(x, y, z), d)]}
           />
         </Suspense>
       </Canvas>
@@ -76,14 +132,22 @@ function App() {
 export default App
 
 type ClipperProps = {
+  video: HTMLVideoElement
   width: number
   height: number
   depth: number
   frameLimit: number
-  video: HTMLVideoElement
+  clipPlanes: THREE.Plane[]
 }
 
-const Clipper = ({ width, height, depth, frameLimit, video }: ClipperProps) => {
+const Clipper = ({
+  video,
+  width,
+  height,
+  depth,
+  frameLimit,
+  clipPlanes,
+}: ClipperProps) => {
   const allTextures = useMemo<Texture[]>(() => [], [video])
   const [textures, setTextures] = useState(allTextures.slice(0, frameLimit))
   const videoCtx = useMemo(() => {
@@ -108,15 +172,10 @@ const Clipper = ({ width, height, depth, frameLimit, video }: ClipperProps) => {
     texture.needsUpdate = true
     texture.flipY = true // FIXME: why the frame is upside down?
     allTextures.push(texture)
-    console.log(allTextures.length)
   }, [video])
-
-  const clipVec = useMemo(() => new THREE.Vector3(0, 0, -1), [])
-  const clipPlanes = useMemo(() => [new THREE.Plane(clipVec, 0)], [clipVec])
 
   useFrame(({ clock }) => {
     const elapsed = clock.getElapsedTime()
-    clipVec.set(Math.cos(elapsed), 0, -1)
 
     const frameIndex = Math.floor(elapsed * 30) % allTextures.length
     const restIndex = frameIndex + frameLimit - allTextures.length
@@ -140,7 +199,10 @@ const Clipper = ({ width, height, depth, frameLimit, video }: ClipperProps) => {
           <boxGeometry args={[width, height, depth]} />
           <meshStandardMaterial
             map={texture}
-            clippingPlanes={clipPlanes}
+            clippingPlanes={[
+              new THREE.Plane(new THREE.Vector3(0, 0, -1), Math.ceil(depth/2)),
+              ...clipPlanes,
+            ]}
             clipShadows={true}
             side={THREE.DoubleSide}
           />
