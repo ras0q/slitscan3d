@@ -11,6 +11,16 @@ function App() {
     state.gl.localClippingEnabled = true
   }
 
+  const [video, setVideo] = useState(() => {
+    const video = document.createElement('video')
+    video.src = sampleVideo
+    video.autoplay = true
+    video.muted = true
+    video.controls = true
+    video.play()
+    return video
+  })
+
   return (
     <div className="App" style={{ width: '80vw', height: '80vh' }}>
       <Canvas
@@ -31,39 +41,36 @@ function App() {
         />
 
         <Suspense fallback={null}>
-          <Clipper />
+          <Clipper
+            width={25}
+            height={25}
+            depth={25}
+            frameLimit={100}
+            video={video}
+          />
         </Suspense>
       </Canvas>
-
-      {/* for conversion to frames */}
-      <video
-        id='video'
-        src={sampleVideo}
-        height={0}
-        width={0}
-        autoPlay
-        muted
-        controls
-      />
     </div>
   )
 }
 
 export default App
 
-const Clipper = () => {
+type ClipperProps = {
+  width: number
+  height: number
+  depth: number
+  frameLimit: number
+  video: HTMLVideoElement
+}
+
+const Clipper = ({ width, height, depth, frameLimit, video }: ClipperProps) => {
   const allTextures = useMemo<Texture[]>(() => [], [])
-  const frameLimit = useMemo(() => 100, [])
-  const [width, height, depth] = useMemo(() => [25, 25, 25], [])
   const [textures, setTextures] = useState(allTextures.slice(0, frameLimit))
 
   const clipVec = useMemo(() => new THREE.Vector3(0, 0, -1), [])
   const clipPlanes = useMemo(() => [new THREE.Plane(clipVec, 0)], [clipVec])
 
-  const video = useMemo(
-    () => document.getElementById('video') as HTMLVideoElement,
-    [],
-  )
   const videoCtx = useMemo(() => {
     const canvas = document.createElement('canvas')
     canvas.width = video.videoWidth
@@ -78,7 +85,7 @@ const Clipper = () => {
         videoCtx?.getImageData(0, 0, video.videoWidth, video.videoHeight)?.data,
         video.videoWidth,
         video.videoHeight,
-        THREE.RGBAFormat,
+        THREE.RGBAFormat
       )
       texture.needsUpdate = true
       texture.flipY = true // FIXME: why the frame is upside down?
