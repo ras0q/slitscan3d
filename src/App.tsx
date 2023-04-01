@@ -5,24 +5,43 @@ import * as THREE from 'three'
 import { Texture } from 'three'
 import './App.css'
 import sampleVideo from './assets/sample-from-adobe.mp4'
+import { useAnimationFrame } from './lib/hooks/useAnimationFrame'
+
+const createVideo = (src: string) => {
+  const video = document.createElement('video')
+  video.src = src
+  video.autoplay = true
+  video.muted = true
+  video.controls = true
+
+  video.play()
+
+  return video
+}
 
 function App() {
+  const [video, setVideo] = useState(createVideo(sampleVideo))
+
   const createdHandler = (state: RootState) => {
     state.gl.localClippingEnabled = true
   }
 
-  const [video, setVideo] = useState(() => {
-    const video = document.createElement('video')
-    video.src = sampleVideo
-    video.autoplay = true
-    video.muted = true
-    video.controls = true
-    video.play()
-    return video
-  })
-
   return (
     <div className="App" style={{ width: '80vw', height: '80vh' }}>
+      <input
+        type="file"
+        accept="video/*"
+        title="Choose a video file to play"
+        onChange={(e) => {
+          if (e.target.files && e.target.files.length > 0) {
+            const newVideo = createVideo(URL.createObjectURL(e.target.files[0]))
+            newVideo.oncanplay = () => {
+              setVideo(newVideo)
+            }
+          }
+        }}
+      />
+
       <Canvas
         orthographic
         camera={{ position: [2, 2, 10], zoom: 10 }}
@@ -65,34 +84,37 @@ type ClipperProps = {
 }
 
 const Clipper = ({ width, height, depth, frameLimit, video }: ClipperProps) => {
-  const allTextures = useMemo<Texture[]>(() => [], [])
+  const allTextures = useMemo<Texture[]>(() => [], [video])
   const [textures, setTextures] = useState(allTextures.slice(0, frameLimit))
-
-  const clipVec = useMemo(() => new THREE.Vector3(0, 0, -1), [])
-  const clipPlanes = useMemo(() => [new THREE.Plane(clipVec, 0)], [clipVec])
-
   const videoCtx = useMemo(() => {
     const canvas = document.createElement('canvas')
     canvas.width = video.videoWidth
     canvas.height = video.videoHeight
-    return canvas.getContext('2d')
-  }, [])
+    return canvas.getContext('2d', { willReadFrequently: true })
+  }, [video])
+
+  useAnimationFrame(() => {
+    const { paused, ended, videoWidth, videoHeight } = video
+    if (paused || ended || videoWidth === 0 || videoHeight === 0) return
+    if (videoCtx === null) return
+
+    videoCtx.drawImage(video, 0, 0, videoWidth, videoHeight)
+    const texture = new THREE.DataTexture(
+      videoCtx.getImageData(0, 0, videoWidth, videoHeight)?.data,
+      videoWidth,
+      videoHeight,
+      THREE.RGBAFormat
+    )
+    texture.needsUpdate = true
+    texture.flipY = true // FIXME: why the frame is upside down?
+    allTextures.push(texture)
+    console.log(allTextures.length)
+  }, [video])
+
+  const clipVec = useMemo(() => new THREE.Vector3(0, 0, -1), [])
+  const clipPlanes = useMemo(() => [new THREE.Plane(clipVec, 0)], [clipVec])
 
   useFrame(({ clock }) => {
-    if (!(video.paused || video.ended)) {
-      videoCtx?.drawImage(video, 0, 0, video.videoWidth, video.videoHeight)
-      const texture = new THREE.DataTexture(
-        videoCtx?.getImageData(0, 0, video.videoWidth, video.videoHeight)?.data,
-        video.videoWidth,
-        video.videoHeight,
-        THREE.RGBAFormat
-      )
-      texture.needsUpdate = true
-      texture.flipY = true // FIXME: why the frame is upside down?
-      allTextures.push(texture)
-      console.log(allTextures.length)
-    }
-
     const elapsed = clock.getElapsedTime()
     clipVec.set(Math.cos(elapsed), 0, -1)
 
