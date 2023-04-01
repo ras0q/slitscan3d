@@ -3,7 +3,6 @@ import { Canvas, RootState, useFrame } from '@react-three/fiber'
 import { Suspense, useMemo, useState } from 'react'
 import * as THREE from 'three'
 import { Texture } from 'three'
-import './App.css'
 import sampleVideo from './assets/sample-from-adobe.mp4'
 import { useAnimationFrame } from './lib/hooks/useAnimationFrame'
 
@@ -99,7 +98,7 @@ function App() {
 
       <Canvas
         orthographic
-        camera={{ position: [2, 2, 10], zoom: 10, near: -100 }}
+        camera={{ position: [2, 2, 10], zoom: 15, near: -100 }}
         dpr={[1, 2]}
         shadows
         onCreated={createdHandler}
@@ -200,7 +199,10 @@ const Clipper = ({
           <meshStandardMaterial
             map={texture}
             clippingPlanes={[
-              new THREE.Plane(new THREE.Vector3(0, 0, -1), Math.ceil(depth/2)),
+              new THREE.Plane(
+                new THREE.Vector3(0, 0, -1),
+                Math.ceil(depth / 2)
+              ),
               ...clipPlanes,
             ]}
             clipShadows={true}
