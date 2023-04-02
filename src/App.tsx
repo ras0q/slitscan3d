@@ -21,71 +21,48 @@ function App() {
   const [z, setZ] = useState(-1)
   const [d, setD] = useState(0)
 
+  const inputRange = {
+    x: { min: -1, max: 1, step: 0.1, value: x, onChange: setX },
+    y: { min: -1, max: 1, step: 0.1, value: y, onChange: setY },
+    z: { min: -1, max: 1, step: 0.1, value: z, onChange: setZ },
+    d: { min: -30, max: 30, step: 1, value: d, onChange: setD },
+  }
+
   return (
     <div className="App" style={{ width: '80vw', height: '80vh' }}>
+      {Object.entries(inputRange).map(
+        ([key, { min, max, step, value, onChange }]) => (
+          <div key={key}>
+            <label htmlFor={key}>{key}</label>
+            <input
+              type="range"
+              min={min}
+              max={max}
+              step={step}
+              value={value}
+              onChange={(e) => onChange(Number(e.target.value))}
+            />
+          </div>
+        ),
+      )}
+
       <div>
-        <label htmlFor="x">x</label>
         <input
-          type="range"
-          name="x"
-          min={-1}
-          max={1}
-          step={0.1}
-          value={x}
+          type="file"
+          accept="video/*"
+          title="Choose a video file to play"
           onChange={(e) => {
-            setX(Number(e.target.value))
+            if (e.target.files && e.target.files.length > 0) {
+              const newVideo = createVideo(
+                URL.createObjectURL(e.target.files[0]),
+              )
+              newVideo.oncanplay = () => {
+                setVideo(newVideo)
+              }
+            }
           }}
         />
       </div>
-      <div>
-        <label htmlFor="y">y</label>
-        <input
-          type="range"
-          name="y"
-          min={-1}
-          max={1}
-          step={0.1}
-          value={y}
-          onChange={(e) => setY(Number(e.target.value))}
-        />
-      </div>
-      <div>
-        <label htmlFor="z">z</label>
-        <input
-          type="range"
-          name="z"
-          min={-1}
-          max={1}
-          step={0.1}
-          value={z}
-          onChange={(e) => setZ(Number(e.target.value))}
-        />
-      </div>
-      <div>
-        <label htmlFor="d">d</label>
-        <input
-          type="range"
-          name="d"
-          min={-30}
-          max={30}
-          value={d}
-          onChange={(e) => setD(Number(e.target.value))}
-        />
-      </div>
-
-      <input
-        type="file"
-        accept="video/*"
-        title="Choose a video file to play"
-        onChange={(e) => {
-          if (e.target.files && e.target.files.length > 0) {
-            const newVideo = createVideo(URL.createObjectURL(e.target.files[0]))
-            newVideo.oncanplay = () => {
-              setVideo(newVideo)
-            }
-          }
-        }}
-      />
 
       <SlitScanCanvas video={video} x={x} y={y} z={z} d={d} />
     </div>
