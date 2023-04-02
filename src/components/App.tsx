@@ -16,7 +16,7 @@ const createVideo = (src: string) => {
 
 function App() {
   const [video, setVideo] = useState(createVideo(sampleVideo))
-  const [x, setX] = useState(1)
+  const [x, setX] = useState(-1)
   const [y, setY] = useState(0)
   const [z, setZ] = useState(-1)
   const [d, setD] = useState(0)
