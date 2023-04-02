@@ -1,5 +1,11 @@
 {
-  "$schema": "./node_modules/rome/configuration_schema.json",
+  "$schema": "https://raw.githubusercontent.com/rome/tools/main/npm/rome/configuration_schema.json",
+  "files": {
+    "ignore": [
+      ".yarn/**",
+      ".pnp.*"
+    ]
+  },
   "linter": {
     "enabled": true,
     "rules": {
