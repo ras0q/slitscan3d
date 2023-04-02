@@ -1,9 +1,6 @@
-import { OrbitControls } from '@react-three/drei'
-import { Canvas, RootState } from '@react-three/fiber'
-import { Suspense, useState } from 'react'
-import * as THREE from 'three'
+import { useState } from 'react'
 import sampleVideo from './assets/sample-from-adobe.mp4'
-import { SlitScanGroup } from './components/slitscan/SlitScanGroup'
+import { SlitScanCanvas } from './components/slitscan/SlitScanCanvas'
 
 const createVideo = (src: string) => {
   const video = document.createElement('video')
@@ -24,10 +21,6 @@ function App() {
   const [y, setY] = useState(0)
   const [z, setZ] = useState(-1)
   const [d, setD] = useState(0)
-
-  const createdHandler = (state: RootState) => {
-    state.gl.localClippingEnabled = true
-  }
 
   return (
     <div className="App" style={{ width: '80vw', height: '80vh' }}>
@@ -95,34 +88,7 @@ function App() {
         }}
       />
 
-      <Canvas
-        orthographic
-        camera={{ position: [2, 2, 10], zoom: 15, near: -100 }}
-        dpr={[1, 2]}
-        shadows
-        onCreated={createdHandler}
-      >
-        <OrbitControls />
-        <ambientLight intensity={0.1} />
-        <directionalLight
-          position={[5, 5, 5]}
-          intensity={1}
-          shadowMapWidth={2048}
-          shadowMapHeight={2048}
-          castShadow
-        />
-
-        <Suspense fallback={null}>
-          <SlitScanGroup
-            video={video}
-            width={25}
-            height={25}
-            depth={25}
-            frameLimit={100}
-            clipPlanes={[new THREE.Plane(new THREE.Vector3(x, y, z), d)]}
-          />
-        </Suspense>
-      </Canvas>
+      <SlitScanCanvas video={video} x={x} y={y} z={z} d={d} />
     </div>
   )
 }
