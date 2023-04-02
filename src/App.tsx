@@ -114,7 +114,7 @@ function App() {
         />
 
         <Suspense fallback={null}>
-          <Clipper
+          <SlitScanGroup
             video={video}
             width={25}
             height={25}
@@ -130,7 +130,7 @@ function App() {
 
 export default App
 
-type ClipperProps = {
+type SlitScanGroupProps = {
   video: HTMLVideoElement
   width: number
   height: number
@@ -139,14 +139,14 @@ type ClipperProps = {
   clipPlanes: THREE.Plane[]
 }
 
-const Clipper = ({
+const SlitScanGroup = ({
   video,
   width,
   height,
   depth,
   frameLimit,
   clipPlanes,
-}: ClipperProps) => {
+}: SlitScanGroupProps) => {
   const allTextures = useMemo<Texture[]>(() => [], [video])
   const [textures, setTextures] = useState(allTextures.slice(0, frameLimit))
   const videoCtx = useMemo(() => {
