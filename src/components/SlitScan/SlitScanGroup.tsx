@@ -1,5 +1,5 @@
 import { useFrame } from '@react-three/fiber'
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { useAnimationFrame } from '../../lib/hooks/useAnimationFrame'
 import {
   Texture,
@@ -53,18 +53,31 @@ export const SlitScanGroup = ({
     allTextures.push(texture)
   }, [video])
 
-  useFrame(({ clock }) => {
-    const elapsed = clock.getElapsedTime()
+  const nullFrame: Texture = useMemo(
+    () => new DataTexture(null, width, height, RGBAFormat),
+    [width, height],
+  )
 
-    const frameIndex = Math.floor(elapsed * 30) % allTextures.length
-    const restIndex = frameIndex + frameLimit - allTextures.length
-    const newFrames =
-      restIndex > 0
-        ? allTextures
-            .slice(frameIndex, allTextures.length)
-            .concat(allTextures.slice(0, restIndex))
-        : allTextures.slice(frameIndex, frameIndex + frameLimit)
-    setTextures(newFrames)
+  const frameIndex = useRef(0)
+  useFrame(() => {
+    // if frames are not enough, fill with null frames
+    if (allTextures.length < frameLimit) {
+      setTextures(
+        Array.from(
+          { length: frameLimit - allTextures.length },
+          () => nullFrame,
+        ).concat(allTextures),
+      )
+      return
+    }
+
+    frameIndex.current = (frameIndex.current + 1) % allTextures.length
+    setTextures(
+      Array.from(
+        { length: frameLimit },
+        (_, i) => allTextures[(frameIndex.current + i) % allTextures.length],
+      ),
+    )
   })
 
   return (
