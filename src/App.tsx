@@ -1,10 +1,9 @@
 import { OrbitControls } from '@react-three/drei'
-import { Canvas, RootState, useFrame } from '@react-three/fiber'
-import { Suspense, useMemo, useState } from 'react'
+import { Canvas, RootState } from '@react-three/fiber'
+import { Suspense, useState } from 'react'
 import * as THREE from 'three'
-import { Texture } from 'three'
 import sampleVideo from './assets/sample-from-adobe.mp4'
-import { useAnimationFrame } from './lib/hooks/useAnimationFrame'
+import { SlitScanGroup } from './components/slitscan/SlitScanGroup'
 
 const createVideo = (src: string) => {
   const video = document.createElement('video')
@@ -129,87 +128,3 @@ function App() {
 }
 
 export default App
-
-type SlitScanGroupProps = {
-  video: HTMLVideoElement
-  width: number
-  height: number
-  depth: number
-  frameLimit: number
-  clipPlanes: THREE.Plane[]
-}
-
-const SlitScanGroup = ({
-  video,
-  width,
-  height,
-  depth,
-  frameLimit,
-  clipPlanes,
-}: SlitScanGroupProps) => {
-  const allTextures = useMemo<Texture[]>(() => [], [video])
-  const [textures, setTextures] = useState(allTextures.slice(0, frameLimit))
-  const videoCtx = useMemo(() => {
-    const canvas = document.createElement('canvas')
-    canvas.width = video.videoWidth
-    canvas.height = video.videoHeight
-    return canvas.getContext('2d', { willReadFrequently: true })
-  }, [video])
-
-  useAnimationFrame(() => {
-    const { paused, ended, videoWidth, videoHeight } = video
-    if (paused || ended || videoWidth === 0 || videoHeight === 0) return
-    if (videoCtx === null) return
-
-    videoCtx.drawImage(video, 0, 0, videoWidth, videoHeight)
-    const texture = new THREE.DataTexture(
-      videoCtx.getImageData(0, 0, videoWidth, videoHeight)?.data,
-      videoWidth,
-      videoHeight,
-      THREE.RGBAFormat
-    )
-    texture.needsUpdate = true
-    texture.flipY = true // FIXME: why the frame is upside down?
-    allTextures.push(texture)
-  }, [video])
-
-  useFrame(({ clock }) => {
-    const elapsed = clock.getElapsedTime()
-
-    const frameIndex = Math.floor(elapsed * 30) % allTextures.length
-    const restIndex = frameIndex + frameLimit - allTextures.length
-    const newFrames =
-      restIndex > 0
-        ? allTextures
-            .slice(frameIndex, allTextures.length)
-            .concat(allTextures.slice(0, restIndex))
-        : allTextures.slice(frameIndex, frameIndex + frameLimit)
-    setTextures(newFrames)
-  })
-
-  return (
-    <group>
-      {textures.map((texture, i) => (
-        <mesh
-          key={i.toString()}
-          castShadow
-          position={[0, 0, i * (depth / textures.length)]}
-        >
-          <boxGeometry args={[width, height, depth]} />
-          <meshStandardMaterial
-            map={texture}
-            clippingPlanes={[
-              new THREE.Plane(
-                new THREE.Vector3(0, 0, -1),
-                Math.ceil(depth / 2)
-              ),
-              ...clipPlanes,
-            ]}
-            clipShadows={true}
-            side={THREE.DoubleSide}
-          />
-        </mesh>
-      ))}
-    </group>
-  )
-}

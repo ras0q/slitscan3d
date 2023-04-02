@@ -2,7 +2,7 @@ import { DependencyList, useCallback, useEffect, useRef } from 'react'
 
 export const useAnimationFrame = (
   callback: () => void,
-  deps: DependencyList
+  deps: DependencyList,
 ) => {
   const requestRef = useRef<number>()
   const animate = useCallback(() => {
