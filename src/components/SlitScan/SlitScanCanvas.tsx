@@ -1,8 +1,8 @@
 import { OrbitControls } from '@react-three/drei'
 import { Canvas, RootState } from '@react-three/fiber'
 import { Suspense } from 'react'
-import * as THREE from 'three'
 import { SlitScanGroup } from './SlitScanGroup'
+import { Plane, Vector3 } from 'three'
 
 type SlitScanCanvasProps = {
   video: HTMLVideoElement
@@ -40,7 +40,7 @@ export const SlitScanCanvas = ({ video, x, y, z, d }: SlitScanCanvasProps) => {
           height={25}
           depth={25}
           frameLimit={100}
-          clipPlanes={[new THREE.Plane(new THREE.Vector3(x, y, z), d)]}
+          clipPlanes={[new Plane(new Vector3(x, y, z), d)]}
         />
       </Suspense>
     </Canvas>
