@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import sampleVideo from './assets/sample-from-adobe.mp4'
-import { SlitScanCanvas } from './components/slitscan/SlitScanCanvas'
+import { SlitScanCanvas } from './components/SlitScan/SlitScanCanvas'
 
 const createVideo = (src: string) => {
   const video = document.createElement('video')
@@ -16,7 +16,6 @@ const createVideo = (src: string) => {
 
 function App() {
   const [video, setVideo] = useState(createVideo(sampleVideo))
-
   const [x, setX] = useState(1)
   const [y, setY] = useState(0)
   const [z, setZ] = useState(-1)
