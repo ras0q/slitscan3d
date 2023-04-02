@@ -82,6 +82,12 @@ export const SlitScanGroup = ({
     )
   })
 
+  // clip the front of the extra drawn box
+  const additionalClipPlane = useMemo(
+    () => new Plane(new Vector3(0, 0, -1), Math.ceil(depth / 2)),
+    [depth],
+  )
+
   return (
     <group>
       {textures.map((texture, i) => (
@@ -93,10 +99,7 @@ export const SlitScanGroup = ({
           <boxGeometry args={[width, height, depth]} />
           <meshStandardMaterial
             map={texture}
-            clippingPlanes={[
-              new Plane(new Vector3(0, 0, -1), Math.ceil(depth / 2)),
-              ...clipPlanes,
-            ]}
+            clippingPlanes={[additionalClipPlane, ...clipPlanes]}
             clipShadows={true}
             side={DoubleSide}
           />
