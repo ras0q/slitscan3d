@@ -1,5 +1,5 @@
 import { useFrame } from '@react-three/fiber'
-import { useMemo, useRef, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import { useAnimationFrame } from '../../lib/hooks/useAnimationFrame'
 import {
   Texture,
@@ -36,7 +36,7 @@ export const SlitScanGroup = ({
     return canvas.getContext('2d', { willReadFrequently: true })
   }, [video])
 
-  useAnimationFrame(() => {
+  const createFrameLoop = useCallback(() => {
     const { paused, ended, videoWidth, videoHeight } = video
     if (paused || ended || videoWidth === 0 || videoHeight === 0) return
     if (videoCtx === null) return
@@ -50,8 +50,10 @@ export const SlitScanGroup = ({
     )
     texture.needsUpdate = true
     texture.flipY = true // FIXME: why the frame is upside down?
+
     allTextures.push(texture)
   }, [video])
+  useAnimationFrame(createFrameLoop)
 
   const nullFrame: Texture = useMemo(
     () => new DataTexture(null, width, height, RGBAFormat),
