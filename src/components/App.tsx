@@ -36,6 +36,7 @@ function App() {
             <label htmlFor={key}>{key}</label>
             <input
               type="range"
+              title={key}
               min={min}
               max={max}
               step={step}
