@@ -1,7 +1,7 @@
+import { SlitScanGroup } from './SlitScanGroup'
 import { OrbitControls } from '@react-three/drei'
 import { Canvas, RootState } from '@react-three/fiber'
 import { Suspense } from 'react'
-import { SlitScanGroup } from './SlitScanGroup'
 import { Plane, Vector3 } from 'three'
 
 type SlitScanCanvasProps = {

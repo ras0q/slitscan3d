@@ -8,7 +8,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "lint": "rome check .",
-    "lint:fix": "rome check . --apply",
+    "lint:fix": "rome check . --apply-unsafe",
     "format": "rome format . --write"
   },
   "dependencies": {
@@ -23,7 +23,7 @@
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
     "@vitejs/plugin-react": "^3.1.0",
-    "rome": "^11.0.0",
+    "rome": "^12.0.0",
     "typescript": "^4.9.3",
     "vite": "^4.1.0"
   },

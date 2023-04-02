@@ -1,13 +1,13 @@
+import { useAnimationFrame } from '../../lib/hooks/useAnimationFrame'
 import { useFrame } from '@react-three/fiber'
 import { useCallback, useMemo, useRef, useState } from 'react'
-import { useAnimationFrame } from '../../lib/hooks/useAnimationFrame'
 import {
-  Texture,
   DataTexture,
-  RGBAFormat,
-  Vector3,
   DoubleSide,
   Plane,
+  RGBAFormat,
+  Texture,
+  Vector3,
 } from 'three'
 
 type SlitScanGroupProps = {
@@ -42,7 +42,9 @@ export const SlitScanGroup = ({
     if (videoCtx === null) return
 
     videoCtx.drawImage(video, 0, 0, videoWidth, videoHeight)
-    const texture = new Texture(videoCtx.getImageData(0, 0, videoWidth, videoHeight))
+    const texture = new Texture(
+      videoCtx.getImageData(0, 0, videoWidth, videoHeight),
+    )
     texture.needsUpdate = true
 
     allTextures.push(texture)

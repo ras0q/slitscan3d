@@ -12,6 +12,9 @@
     "indentStyle": "space",
     "indentSize": 2
   },
+  "organizeImports": {
+    "enabled": true
+  },
   "javascript": {
     "formatter": {
       "quoteStyle": "single",

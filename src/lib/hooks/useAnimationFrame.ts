@@ -1,7 +1,7 @@
 import { DependencyList, useCallback, useEffect, useRef } from 'react'
 
 export const useAnimationFrame = (callback: () => void) => {
-  const requestRef = useRef<number>()
+  const requestRef = useRef(0)
   const animate = useCallback(() => {
     requestRef.current = requestAnimationFrame(animate)
     callback()
@@ -9,6 +9,6 @@ export const useAnimationFrame = (callback: () => void) => {
 
   useEffect(() => {
     requestRef.current = requestAnimationFrame(animate)
-    return () => cancelAnimationFrame(requestRef.current!)
+    return () => cancelAnimationFrame(requestRef.current)
   }, [animate])
 }
