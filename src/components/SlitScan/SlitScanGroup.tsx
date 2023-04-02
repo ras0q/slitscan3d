@@ -42,14 +42,8 @@ export const SlitScanGroup = ({
     if (videoCtx === null) return
 
     videoCtx.drawImage(video, 0, 0, videoWidth, videoHeight)
-    const texture = new DataTexture(
-      videoCtx.getImageData(0, 0, videoWidth, videoHeight)?.data,
-      videoWidth,
-      videoHeight,
-      RGBAFormat,
-    )
+    const texture = new Texture(videoCtx.getImageData(0, 0, videoWidth, videoHeight))
     texture.needsUpdate = true
-    texture.flipY = true // FIXME: why the frame is upside down?
 
     allTextures.push(texture)
   }, [video])
