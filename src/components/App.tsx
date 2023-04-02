@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import sampleVideo from './assets/sample-from-adobe.mp4'
-import { SlitScanCanvas } from './components/SlitScan/SlitScanCanvas'
+import { SlitScanCanvas } from './SlitScan/SlitScanCanvas'
 
 const createVideo = (src: string) => {
   const video = document.createElement('video')
