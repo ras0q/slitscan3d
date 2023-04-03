@@ -1,4 +1,4 @@
-import { DependencyList, useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 
 export const useAnimationFrame = (callback: () => void) => {
   const requestRef = useRef(0)
