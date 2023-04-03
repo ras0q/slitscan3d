@@ -51,9 +51,13 @@ export const SlitScanGroup = ({
   }, [video])
   useAnimationFrame(createFrameLoop)
 
-  const nullFrame: Texture = useMemo(
-    () => new DataTexture(null, width, height, RGBAFormat),
-    [width, height],
+  const nullFrames: Texture[] = useMemo(
+    () =>
+      Array.from(
+        { length: frameLimit },
+        () => new DataTexture(null, width, height, RGBAFormat),
+      ),
+    [width, height, frameLimit],
   )
 
   const frameIndex = useRef(0)
@@ -61,10 +65,9 @@ export const SlitScanGroup = ({
     // if frames are not enough, fill with null frames
     if (allTextures.length < frameLimit) {
       setTextures(
-        Array.from(
-          { length: frameLimit - allTextures.length },
-          () => nullFrame,
-        ).concat(allTextures),
+        nullFrames
+          .slice(0, frameLimit - allTextures.length)
+          .concat(allTextures),
       )
       return
     }
@@ -88,7 +91,7 @@ export const SlitScanGroup = ({
     <group>
       {textures.map((texture, i) => (
         <mesh
-          key={i.toString()}
+          key={texture.id}
           castShadow
           position={[0, 0, i * (depth / textures.length)]}
         >
