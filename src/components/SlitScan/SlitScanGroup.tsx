@@ -2,6 +2,7 @@ import { useAnimationFrame } from '../../lib/hooks/useAnimationFrame'
 import { useFrame } from '@react-three/fiber'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import {
+  CanvasTexture,
   DataTexture,
   DoubleSide,
   Plane,
@@ -29,25 +30,30 @@ export const SlitScanGroup = ({
 }: SlitScanGroupProps) => {
   const allTextures = useMemo<Texture[]>(() => [], [video])
   const [textures, setTextures] = useState(allTextures.slice(0, frameLimit))
-  const videoCtx = useMemo(() => {
+  const videoCanvas = useMemo(() => {
     const canvas = document.createElement('canvas')
     canvas.width = video.videoWidth
     canvas.height = video.videoHeight
-    return canvas.getContext('2d', { willReadFrequently: true })
+    return canvas
+  }, [video])
+  const videoCtx = videoCanvas.getContext('2d', { willReadFrequently: true })
+  const videoIsValid = useCallback(() => {
+    return (
+      !video.paused &&
+      !video.ended &&
+      video.videoWidth !== 0 &&
+      video.videoHeight !== 0
+    )
   }, [video])
 
+  if (videoIsValid()) {
+    videoCtx?.drawImage(video, 0, 0, video.videoWidth, video.videoHeight)
+  }
+
   const createFrameLoop = useCallback(() => {
-    const { paused, ended, videoWidth, videoHeight } = video
-    if (paused || ended || videoWidth === 0 || videoHeight === 0) return
-    if (videoCtx === null) return
-
-    videoCtx.drawImage(video, 0, 0, videoWidth, videoHeight)
-    const texture = new Texture(
-      videoCtx.getImageData(0, 0, videoWidth, videoHeight),
-    )
-    texture.needsUpdate = true
-
-    allTextures.push(texture)
+    if (videoIsValid()) {
+      allTextures.push(new CanvasTexture(videoCanvas))
+    }
   }, [video])
   useAnimationFrame(createFrameLoop)
 
