@@ -28,7 +28,7 @@ export const SlitScanGroup = ({
   frameLimit,
   clipPlanes,
 }: SlitScanGroupProps) => {
-  const allTextures = useMemo<Texture[]>(() => [], [video])
+  const [allTextures, setAllTextures] = useState<Texture[]>([])
   const [textures, setTextures] = useState(allTextures.slice(0, frameLimit))
   const videoCanvas = useMemo(() => {
     const canvas = document.createElement('canvas')
@@ -53,6 +53,7 @@ export const SlitScanGroup = ({
   const createFrameLoop = useCallback(() => {
     if (videoIsValid()) {
       allTextures.push(new CanvasTexture(videoCanvas))
+      setAllTextures(allTextures)
     }
   }, [video])
   useAnimationFrame(createFrameLoop)
