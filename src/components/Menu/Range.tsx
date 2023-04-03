@@ -1,5 +1,5 @@
 type RangeProps = {
-  key: string
+  title: string
   min: number
   max: number
   step: number
@@ -7,13 +7,20 @@ type RangeProps = {
   onChange: (value: number) => void
 }
 
-export const Range = ({ key, min, max, step, value, onChange }: RangeProps) => {
+export const Range = ({
+  title,
+  min,
+  max,
+  step,
+  value,
+  onChange,
+}: RangeProps) => {
   return (
-    <div key={key}>
-      <label htmlFor={key}>{key}</label>
+    <div key={title}>
+      <label htmlFor={title}>{title}</label>
       <input
         type="range"
-        title={key}
+        title={title}
         min={min}
         max={max}
         step={step}

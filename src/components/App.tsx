@@ -30,12 +30,12 @@ export const App = () => {
   const [z, setZ] = useState(-1)
   const [d, setD] = useState(0)
 
-  const inputRange = {
-    x: { min: -1, max: 1, step: 0.1, value: x, onChange: setX },
-    y: { min: -1, max: 1, step: 0.1, value: y, onChange: setY },
-    z: { min: -1, max: 1, step: 0.1, value: z, onChange: setZ },
-    d: { min: -30, max: 30, step: 1, value: d, onChange: setD },
-  }
+  const inputRanges = [
+    { title: 'x', min: -1, max: 1, step: 0.1, value: x, onChange: setX },
+    { title: 'y', min: -1, max: 1, step: 0.1, value: y, onChange: setY },
+    { title: 'z', min: -1, max: 1, step: 0.1, value: z, onChange: setZ },
+    { title: 'd', min: -30, max: 30, step: 1, value: d, onChange: setD },
+  ]
 
   const videoInputButtonOnChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
@@ -61,9 +61,9 @@ export const App = () => {
 
   return (
     <div className="App" style={{ width: '80vw', height: '80vh' }}>
-      {Object.entries(inputRange).map(([key, value]) =>
-        Range({ key, ...value }),
-      )}
+      {inputRanges.map((v, i) => (
+        <Range key={i.toString()} {...v} />
+      ))}
 
       <div>
         <input
