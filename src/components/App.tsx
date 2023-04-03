@@ -1,4 +1,5 @@
 import sampleVideo from '../assets/sample.mp4'
+import { Range } from './Menu/Range'
 import { SlitScanCanvas } from './SlitScan/SlitScanCanvas'
 import { ChangeEvent, useCallback, useState } from 'react'
 
@@ -60,21 +61,8 @@ export const App = () => {
 
   return (
     <div className="App" style={{ width: '80vw', height: '80vh' }}>
-      {Object.entries(inputRange).map(
-        ([key, { min, max, step, value, onChange }]) => (
-          <div key={key}>
-            <label htmlFor={key}>{key}</label>
-            <input
-              type="range"
-              title={key}
-              min={min}
-              max={max}
-              step={step}
-              value={value}
-              onChange={(e) => onChange(Number(e.target.value))}
-            />
-          </div>
-        ),
+      {Object.entries(inputRange).map(([key, value]) =>
+        Range({ key, ...value }),
       )}
 
       <div>
