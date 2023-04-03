@@ -14,7 +14,7 @@ const createVideo = (src: string) => {
   return video
 }
 
-function App() {
+export const App = () => {
   const [video, setVideo] = useState(createVideo(sampleVideo))
   const [x, setX] = useState(-1)
   const [y, setY] = useState(0)
@@ -69,5 +69,3 @@ function App() {
     </div>
   )
 }
-
-export default App
