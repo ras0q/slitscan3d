@@ -25,13 +25,7 @@ export const SlitScanCanvas = ({ video, x, y, z, d }: SlitScanCanvasProps) => {
     >
       <OrbitControls />
       <ambientLight intensity={0.1} />
-      <directionalLight
-        position={[5, 5, 5]}
-        intensity={1}
-        shadowMapWidth={2048}
-        shadowMapHeight={2048}
-        castShadow
-      />
+      <directionalLight position={[5, 5, 5]} intensity={1} shadowMapWidth={2048} shadowMapHeight={2048} castShadow />
 
       <Suspense fallback={null}>
         <SlitScanGroup

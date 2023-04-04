@@ -37,17 +37,14 @@ export const App = () => {
     { title: 'd', min: -30, max: 30, step: 1, value: d, onChange: setD },
   ]
 
-  const videoInputButtonOnChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      if (e.target.files && e.target.files.length > 0) {
-        const newVideo = createVideo(URL.createObjectURL(e.target.files[0]))
-        newVideo.oncanplay = () => {
-          setVideo(newVideo)
-        }
+  const videoInputButtonOnChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const newVideo = createVideo(URL.createObjectURL(e.target.files[0]))
+      newVideo.oncanplay = () => {
+        setVideo(newVideo)
       }
-    },
-    [],
-  )
+    }
+  }, [])
 
   const streamButtonOnClick = useCallback(async () => {
     const stream = await navigator.mediaDevices.getUserMedia({
@@ -66,12 +63,7 @@ export const App = () => {
       ))}
 
       <div>
-        <input
-          type="file"
-          accept="video/*"
-          title="Choose a video file to play"
-          onChange={videoInputButtonOnChange}
-        />
+        <input type="file" accept="video/*" title="Choose a video file to play" onChange={videoInputButtonOnChange} />
       </div>
 
       <div>

@@ -7,14 +7,7 @@ type RangeProps = {
   onChange: (value: number) => void
 }
 
-export const Range = ({
-  title,
-  min,
-  max,
-  step,
-  value,
-  onChange,
-}: RangeProps) => {
+export const Range = ({ title, min, max, step, value, onChange }: RangeProps) => {
   return (
     <div key={title}>
       <label htmlFor={title}>{title}</label>
