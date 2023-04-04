@@ -1,6 +1,6 @@
 import { useAnimationFrame } from '../../lib/hooks/useAnimationFrame'
 import { useFrame } from '@react-three/fiber'
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   CanvasTexture,
   DataTexture,
@@ -29,6 +29,11 @@ export const SlitScanGroup = ({
   clipPlanes,
 }: SlitScanGroupProps) => {
   const [allTextures, setAllTextures] = useState<Texture[]>([])
+  useEffect(() => {
+    allTextures.splice(0, allTextures.length)
+    setAllTextures(allTextures)
+  }, [video])
+
   const [textures, setTextures] = useState(allTextures.slice(0, frameLimit))
   const videoCanvas = useMemo(() => {
     const canvas = document.createElement('canvas')
