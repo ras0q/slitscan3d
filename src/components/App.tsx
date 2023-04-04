@@ -75,7 +75,7 @@ export const App = () => {
       </div>
 
       <div>
-        <button title='Use stream' onClick={streamButtonOnClick}>
+        <button title="Use stream" onClick={streamButtonOnClick}>
           stream
         </button>
       </div>

@@ -4,7 +4,7 @@
 
 <img src="public/preview.gif" width="30%" />
 
-(Video by [動画AC](https://video-ac.com/video/6))
+(Video by [動画 AC](https://video-ac.com/video/6))
 
 ## Features
 

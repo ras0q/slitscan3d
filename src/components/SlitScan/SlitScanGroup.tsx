@@ -72,17 +72,20 @@ export const SlitScanGroup = ({
   useFrame(() => {
     // if frames are not enough, fill with null frames
     if (allTextures.length < frameLimit) {
-      setTextures(textures.map((t, i) =>
-      i < frameLimit - allTextures.length
-        ? t
-        : allTextures[i - (frameLimit - allTextures.length)],
-    ))
+      setTextures(
+        textures.map((t, i) =>
+          i < frameLimit - allTextures.length
+            ? t
+            : allTextures[i - (frameLimit - allTextures.length)],
+        ),
+      )
       return
     }
 
     frameIndex.current = (frameIndex.current + 1) % allTextures.length
     setTextures(
-      textures.map((t, i) => allTextures[(frameIndex.current + i) % allTextures.length],
+      textures.map(
+        (t, i) => allTextures[(frameIndex.current + i) % allTextures.length],
       ),
     )
   })
