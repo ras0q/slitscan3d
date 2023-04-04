@@ -4,7 +4,7 @@ type RangeProps = {
   max: number
   step: number
   value: number
-  onChange: (value: number) => void
+  onChange: (_: number) => void
 }
 
 export const Range = ({ title, min, max, step, value, onChange }: RangeProps) => {

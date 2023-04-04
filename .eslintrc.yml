@@ -20,6 +20,12 @@ rules:
     - error
     - 2
     - SwitchCase: 1
+  no-unused-vars:
+    - error
+    - vars: all
+      args: all
+      argsIgnorePattern: '^_'
+      ignoreRestSiblings: false
   # ref: https://ja.reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html#eslint
   react/jsx-uses-react: off
   react/react-in-jsx-scope: off
