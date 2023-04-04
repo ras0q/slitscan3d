@@ -15,7 +15,8 @@ ras0q/slitscan3d is powered by
 - [Vite](https://vitejs.dev/)
 - [Three.js](https://threejs.org/)
   - [React Three Fiber](https://docs.pmnd.rs/react-three-fiber/)
-- [Rome](https://rome.tools/)
+- [ESLint](https://eslint.org/)
+- [Prettier](https://prettier.io/)
 - [Volta](https://volta.sh/)
 
 ## Quick Start
