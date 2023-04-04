@@ -34,7 +34,6 @@ export const SlitScanGroup = ({
     setAllTextures(allTextures)
   }, [video])
 
-  const [textures, setTextures] = useState(allTextures.slice(0, frameLimit))
   const videoCanvas = useMemo(() => {
     const canvas = document.createElement('canvas')
     canvas.width = video.videoWidth
@@ -63,32 +62,27 @@ export const SlitScanGroup = ({
   }, [video])
   useAnimationFrame(createFrameLoop)
 
-  const nullFrames: Texture[] = useMemo(
-    () =>
-      Array.from(
-        { length: frameLimit },
-        () => new DataTexture(null, width, height, RGBAFormat),
-      ),
-    [width, height, frameLimit],
+  const [textures, setTextures] = useState(
+    Array.from(
+      { length: frameLimit },
+      () => new DataTexture(null, width, height, RGBAFormat) as Texture,
+    ),
   )
-
   const frameIndex = useRef(0)
   useFrame(() => {
     // if frames are not enough, fill with null frames
     if (allTextures.length < frameLimit) {
-      setTextures(
-        nullFrames
-          .slice(0, frameLimit - allTextures.length)
-          .concat(allTextures),
-      )
+      setTextures(textures.map((t, i) =>
+      i < frameLimit - allTextures.length
+        ? t
+        : allTextures[i - (frameLimit - allTextures.length)],
+    ))
       return
     }
 
     frameIndex.current = (frameIndex.current + 1) % allTextures.length
     setTextures(
-      Array.from(
-        { length: frameLimit },
-        (_, i) => allTextures[(frameIndex.current + i) % allTextures.length],
+      textures.map((t, i) => allTextures[(frameIndex.current + i) % allTextures.length],
       ),
     )
   })
