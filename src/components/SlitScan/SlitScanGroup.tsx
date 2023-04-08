@@ -14,9 +14,12 @@ type SlitScanGroupProps = {
 
 export const SlitScanGroup = ({ video, width, height, depth, frameLimit, clipPlanes }: SlitScanGroupProps) => {
   const [allTextures, setAllTextures] = useState<Texture[]>([])
+  const frameIndex = useRef(0)
   useEffect(() => {
     allTextures.splice(0, allTextures.length)
     setAllTextures(allTextures)
+
+    frameIndex.current = 0
   }, [video])
 
   const videoCanvas = useMemo(() => {
@@ -43,7 +46,6 @@ export const SlitScanGroup = ({ video, width, height, depth, frameLimit, clipPla
   const [textures, setTextures] = useState(
     Array.from({ length: frameLimit }, () => new DataTexture(null, width, height, RGBAFormat) as Texture),
   )
-  const frameIndex = useRef(0)
   useFrame(() => {
     // if frames are not enough, fill with null frames
     if (allTextures.length < frameLimit) {
