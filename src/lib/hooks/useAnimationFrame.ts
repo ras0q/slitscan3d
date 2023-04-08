@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useRef } from 'react'
 
-export const useAnimationFrame = (callback: () => void) => {
+export const useAnimationFrame = (callback: () => void, condition: () => boolean) => {
   const requestRef = useRef(0)
   const animate = useCallback(() => {
-    requestRef.current = requestAnimationFrame(animate)
-    callback()
+    if (condition()) {
+      requestRef.current = requestAnimationFrame(animate)
+      callback()
+    }
   }, [callback])
 
   useEffect(() => {

@@ -35,12 +35,10 @@ export const SlitScanGroup = ({ video, width, height, depth, frameLimit, clipPla
   }
 
   const createFrameLoop = useCallback(() => {
-    if (videoIsValid()) {
-      allTextures.push(new CanvasTexture(videoCanvas))
-      setAllTextures(allTextures)
-    }
+    allTextures.push(new CanvasTexture(videoCanvas))
+    setAllTextures(allTextures)
   }, [video])
-  useAnimationFrame(createFrameLoop)
+  useAnimationFrame(createFrameLoop, videoIsValid)
 
   const [textures, setTextures] = useState(
     Array.from({ length: frameLimit }, () => new DataTexture(null, width, height, RGBAFormat) as Texture),
