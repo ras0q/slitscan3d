@@ -1,7 +1,7 @@
 import { useAnimationFrame } from '../../lib/hooks/useAnimationFrame'
 import { useFrame } from '@react-three/fiber'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { CanvasTexture, DataTexture, DoubleSide, Plane, RGBAFormat, Texture, Vector3 } from 'three'
+import { DataTexture, DoubleSide, Plane, RGBAFormat, Texture, Vector3 } from 'three'
 
 type SlitScanGroupProps = {
   video: HTMLVideoElement
@@ -22,25 +22,20 @@ export const SlitScanGroup = ({ video, width, height, depth, frameLimit, clipPla
     frameIndex.current = 0
   }, [video])
 
-  const videoCanvas = useMemo(() => {
-    const canvas = document.createElement('canvas')
-    canvas.width = video.videoWidth
-    canvas.height = video.videoHeight
-    return canvas
+  const createFrameLoop = useCallback(async () => {
+    const imageBitmap = await createImageBitmap(video, {
+      imageOrientation: 'flipY',
+    })
+    const texture = new Texture(imageBitmap)
+    texture.needsUpdate = true
+
+    allTextures.push(texture)
   }, [video])
-  const videoCtx = videoCanvas.getContext('2d', { willReadFrequently: true })
+
   const videoIsValid = useCallback(() => {
     return !video.paused && !video.ended && video.videoWidth !== 0 && video.videoHeight !== 0
   }, [video])
 
-  if (videoIsValid()) {
-    videoCtx?.drawImage(video, 0, 0, video.videoWidth, video.videoHeight)
-  }
-
-  const createFrameLoop = useCallback(() => {
-    allTextures.push(new CanvasTexture(videoCanvas))
-    setAllTextures(allTextures)
-  }, [video])
   useAnimationFrame(createFrameLoop, videoIsValid)
 
   const [textures, setTextures] = useState(
