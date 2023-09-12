@@ -6,7 +6,7 @@ export const useVideo = (src: VideoSrc) => {
   const createVideo = useCallback(
     (src: VideoSrc) => {
       const newVideo = document.createElement('video')
-      newVideo.playsinline = true
+      newVideo.playsInline = true
       newVideo.muted = true
       newVideo.controls = true
       newVideo.play()
