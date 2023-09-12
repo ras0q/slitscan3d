@@ -6,9 +6,10 @@ export const useVideo = (src: VideoSrc) => {
   const createVideo = useCallback(
     (src: VideoSrc) => {
       const newVideo = document.createElement('video')
-      newVideo.autoplay = true
+      newVideo.playsinline = true
       newVideo.muted = true
       newVideo.controls = true
+      newVideo.play()
 
       switch (typeof src) {
         case 'string':
