@@ -9,7 +9,6 @@ export const useVideo = (src: VideoSrc) => {
       newVideo.playsInline = true
       newVideo.muted = true
       newVideo.controls = true
-      newVideo.play()
 
       switch (typeof src) {
         case 'string':
@@ -19,6 +18,8 @@ export const useVideo = (src: VideoSrc) => {
           newVideo.srcObject = src
           break
       }
+
+      newVideo.play()
 
       return newVideo
     },
