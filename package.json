@@ -11,28 +11,28 @@
     "format": "eslint . --ext .js,.jsx,.ts,.tsx --fix && prettier --write ."
   },
   "dependencies": {
-    "@react-three/drei": "^9.56.22",
-    "@react-three/fiber": "^8.11.0",
-    "@types/three": "^0.149.0",
+    "@react-three/drei": "^9.99.5",
+    "@react-three/fiber": "^8.15.16",
+    "@types/three": "^0.162.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "three": "^0.149.0"
+    "three": "^0.162.0"
   },
   "devDependencies": {
-    "@types/react": "^18.0.27",
-    "@types/react-dom": "^18.0.10",
+    "@types/react": "^18.2.61",
+    "@types/react-dom": "^18.2.19",
     "@typescript-eslint/eslint-plugin": "latest",
     "@typescript-eslint/parser": "latest",
-    "@vitejs/plugin-react": "^3.1.0",
-    "eslint": "^8.37.0",
-    "eslint-config-prettier": "^8.8.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-react": "latest",
-    "prettier": "^2.8.7",
-    "typescript": "^4.9.3",
-    "vite": "^4.1.0"
+    "prettier": "^3.2.5",
+    "typescript": "^5.3.3",
+    "vite": "^5.1.4"
   },
-  "volta": {
-    "node": "18.14.0",
-    "yarn": "3.5.0"
-  }
+  "engines": {
+    "node": "20.x"
+  },
+  "packageManager": "yarn@4.1.0+sha256.81a00df816059803e6b5148acf03ce313cad36b7f6e5af6efa040a15981a6ffb"
 }
