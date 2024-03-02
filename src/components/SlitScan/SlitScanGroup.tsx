@@ -1,7 +1,7 @@
 import { useAnimationFrame } from '../../lib/hooks/useAnimationFrame'
 import { useFrame } from '@react-three/fiber'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { DataTexture, DoubleSide, Plane, RGBAFormat, Texture, Vector3 } from 'three'
+import { DataTexture, DoubleSide, MeshStandardMaterial, Plane, RGBAFormat, Texture, Vector3 } from 'three'
 
 type SlitScanGroupProps = {
   video: HTMLVideoElement
@@ -36,22 +36,29 @@ export const SlitScanGroup = ({ video, width, height, depth, frameLimit, clipPla
 
   useAnimationFrame(createFrameLoop, videoIsValid)
 
-  const [textures, setTextures] = useState(
-    Array.from({ length: frameLimit }, () => new DataTexture(null, width, height, RGBAFormat) as Texture),
+  const materialRefs = Array.from({ length: frameLimit }, () =>
+    useRef<MeshStandardMaterial>(
+      new MeshStandardMaterial({
+        map: new DataTexture(null, width, height, RGBAFormat) as Texture,
+      }),
+    ),
   )
+
   useFrame(() => {
     // if frames are not enough, fill with null frames
     if (allTextures.length < frameLimit) {
-      setTextures(
-        textures.map((t, i) =>
-          i < frameLimit - allTextures.length ? t : allTextures[i - (frameLimit - allTextures.length)],
-        ),
-      )
+      materialRefs.forEach((ref, i) => {
+        if (i >= frameLimit - allTextures.length) {
+          ref.current.map = allTextures[i - (frameLimit - allTextures.length)]
+        }
+      })
       return
     }
 
     frameIndex.current = (frameIndex.current + 1) % allTextures.length
-    setTextures(textures.map((_, i) => allTextures[(frameIndex.current + i) % allTextures.length]))
+    materialRefs.forEach((ref, i) => {
+      ref.current.map = allTextures[(frameIndex.current + i) % allTextures.length]
+    })
   })
 
   // clip the front of the extra drawn box
@@ -59,11 +66,11 @@ export const SlitScanGroup = ({ video, width, height, depth, frameLimit, clipPla
 
   return (
     <group>
-      {textures.map((texture, i) => (
-        <mesh key={texture.id} castShadow position={[0, 0, i * (depth / textures.length)]}>
+      {materialRefs.map((ref, i) => (
+        <mesh key={ref.current.id} castShadow position={[0, 0, i * (depth / materialRefs.length)]}>
           <boxGeometry args={[width, height, depth]} />
           <meshStandardMaterial
-            map={texture}
+            ref={ref}
             clippingPlanes={[additionalClipPlane, ...clipPlanes]}
             clipShadows={true}
             side={DoubleSide}
