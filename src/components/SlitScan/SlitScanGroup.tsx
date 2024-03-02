@@ -16,9 +16,7 @@ export const SlitScanGroup = ({ video, width, height, depth, frameLimit, clipPla
   const [allTextures, setAllTextures] = useState<Texture[]>([])
   const frameIndex = useRef(0)
   useEffect(() => {
-    allTextures.splice(0, allTextures.length)
-    setAllTextures(allTextures)
-
+    setAllTextures([])
     frameIndex.current = 0
   }, [video])
 
@@ -29,7 +27,7 @@ export const SlitScanGroup = ({ video, width, height, depth, frameLimit, clipPla
     const texture = new Texture(imageBitmap)
     texture.needsUpdate = true
 
-    allTextures.push(texture)
+    setAllTextures((prev) => [...prev, texture])
   }, [video])
 
   const videoIsValid = useCallback(() => {
