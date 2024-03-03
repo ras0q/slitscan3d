@@ -28,6 +28,7 @@ export const SlitScanGroup = ({ video, width, height, depth, frameLimit, clipPla
       setTextures((prev) => (video.paused ? prev : [...prev, texture]))
 
       if (video.paused) {
+        console.log('capture completed!!!')
         video.cancelVideoFrameCallback(reqIdRef.current)
         return
       }
@@ -40,8 +41,9 @@ export const SlitScanGroup = ({ video, width, height, depth, frameLimit, clipPla
       textures.forEach((texture) => texture.dispose())
       video.cancelVideoFrameCallback(reqIdRef.current)
     }
-  }, [video])
+  }, [video, textures])
 
+  const fps = (video.playbackRate * video.getVideoPlaybackQuality().totalVideoFrames) / video.currentTime
   const offsetRef = useRef(0)
   const materialRefs = Array.from({ length: frameLimit }, () =>
     useRef<MeshStandardMaterial>(
@@ -51,16 +53,17 @@ export const SlitScanGroup = ({ video, width, height, depth, frameLimit, clipPla
     ),
   )
 
-  useFrame(() => {
+  useFrame((_, delta) => {
     if (textures.length === 0) return
 
-    if (video.paused || textures.length >= frameLimit) {
-      offsetRef.current = (offsetRef.current + 1) % textures.length
+    const canRotateFrames = video.paused || textures.length >= frameLimit
+    if (canRotateFrames) {
+      offsetRef.current = (offsetRef.current + fps * delta) % textures.length
     }
 
     materialRefs.forEach((ref, i) => {
-      if (i >= textures.length) return
-      ref.current.map = textures[(i + offsetRef.current) % textures.length]
+      if (!canRotateFrames && i > textures.length - 1) return
+      ref.current.map = textures[(i + Math.floor(offsetRef.current)) % textures.length]
     })
   })
 
