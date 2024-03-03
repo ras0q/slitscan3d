@@ -12,6 +12,7 @@ export const App = () => {
   const [y, setY] = useState(0)
   const [z, setZ] = useState(-1)
   const [d, setD] = useState(0)
+  const [axesHelperVidible, setAxesHelperVidible] = useState(false)
 
   const inputRanges = [
     { title: 'x', min: -1, max: 1, step: 0.1, value: x, onChange: setX },
@@ -39,6 +40,10 @@ export const App = () => {
         <Range key={i.toString()} {...v} />
       ))}
 
+      <button title="Toggle axes helper" onClick={() => setAxesHelperVidible((prev) => !prev)}>
+        toggle axes helper
+      </button>
+
       <div>
         <input type="file" accept="video/*" title="Choose a video file to play" onChange={videoInputButtonOnChange} />
       </div>
@@ -49,7 +54,7 @@ export const App = () => {
         </button>
       </div>
 
-      <SlitScanCanvas video={video} x={x} y={y} z={z} d={d} />
+      <SlitScanCanvas video={video} x={x} y={y} z={z} d={d} axesHelperVisible={axesHelperVidible} />
     </div>
   )
 }

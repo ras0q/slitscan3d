@@ -20,7 +20,7 @@ export const SlitScanGroup = ({ video, width, height, depth, frameLimit, clipPla
   useEffect(() => {
     const pushFrame = async () => {
       const imageBitmap = await createImageBitmap(video, {
-        imageOrientation: 'flipY',
+        imageOrientation: 'from-image',
       })
       const texture = new Texture(imageBitmap)
       texture.needsUpdate = true
@@ -68,9 +68,14 @@ export const SlitScanGroup = ({ video, width, height, depth, frameLimit, clipPla
   const additionalClipPlane = useMemo(() => new Plane(new Vector3(0, 0, -1), Math.ceil(depth / 2)), [depth])
 
   return (
-    <group>
+    <group receiveShadow>
       {materialRefs.map((ref, i) => (
-        <mesh key={ref.current.id} castShadow position={[0, 0, depth - i * (depth / materialRefs.length)]}>
+        <mesh
+          castShadow
+          key={ref.current.id}
+          position={[0, 0, depth - i * (depth / materialRefs.length)]}
+          rotation={[Math.PI, 0, 0]} // NOTE: imageBitmap is roteated 180 degrees
+        >
           <boxGeometry args={[width, height, depth]} />
           <meshStandardMaterial
             ref={ref}

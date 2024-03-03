@@ -10,29 +10,42 @@ type SlitScanCanvasProps = {
   y: number
   z: number
   d: number
+  axesHelperVisible: boolean
 }
 
-export const SlitScanCanvas = ({ video, x, y, z, d }: SlitScanCanvasProps) => {
+export const SlitScanCanvas = ({ video, x, y, z, d, axesHelperVisible }: SlitScanCanvasProps) => {
+  if (!video.videoWidth || !video.videoHeight) return null
+
+  const width = 1000
+  const height = (video.videoHeight / video.videoWidth) * width
+  const depth = Math.max(width, height)
+
   return (
     <Canvas
       orthographic
-      camera={{ position: [2, 2, 10], zoom: 15, near: -100 }}
+      camera={{
+        position: [width, height, depth * 5],
+        zoom: 0.5,
+        near: -100,
+        far: 10000,
+      }}
       dpr={[1, 2]}
       shadows
       onCreated={(state: RootState) => {
         state.gl.localClippingEnabled = true
       }}
     >
+      <axesHelper args={[depth * 2]} visible={axesHelperVisible} />
       <OrbitControls />
       <ambientLight intensity={0.1} />
-      <directionalLight position={[5, 5, 5]} intensity={5} />
+      <directionalLight position={[5, 5, 5]} intensity={3} />
 
       <Suspense fallback={null}>
         <SlitScanGroup
           video={video}
-          width={25}
-          height={25}
-          depth={25}
+          width={width}
+          height={height}
+          depth={depth}
           frameLimit={100}
           clipPlanes={[new Plane(new Vector3(x, y, z), d)]}
         />
