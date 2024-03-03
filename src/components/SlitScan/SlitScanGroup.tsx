@@ -1,6 +1,5 @@
-import { useAnimationFrame } from '../../lib/hooks/useAnimationFrame'
 import { useFrame } from '@react-three/fiber'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { DataTexture, DoubleSide, MeshStandardMaterial, Plane, RGBAFormat, Texture, Vector3 } from 'three'
 
 type SlitScanGroupProps = {
@@ -13,29 +12,37 @@ type SlitScanGroupProps = {
 }
 
 export const SlitScanGroup = ({ video, width, height, depth, frameLimit, clipPlanes }: SlitScanGroupProps) => {
+  if (!video) return null
+
   const [allTextures, setAllTextures] = useState<Texture[]>([])
-  const frameIndex = useRef(0)
+  const reqIdRef = useRef(0)
+
   useEffect(() => {
-    setAllTextures([])
-    frameIndex.current = 0
+    const pushFrame = async () => {
+      const imageBitmap = await createImageBitmap(video, {
+        imageOrientation: 'flipY',
+      })
+      const texture = new Texture(imageBitmap)
+      texture.needsUpdate = true
+
+      setAllTextures((prev) => (video.paused ? prev : [...prev, texture]))
+
+      if (video.paused) {
+        video.cancelVideoFrameCallback(reqIdRef.current)
+        return
+      }
+
+      reqIdRef.current = video.requestVideoFrameCallback(pushFrame)
+    }
+    reqIdRef.current = video.requestVideoFrameCallback(pushFrame)
+
+    return () => {
+      allTextures.forEach((texture) => texture.dispose())
+      video.cancelVideoFrameCallback(reqIdRef.current)
+    }
   }, [video])
 
-  const createFrameLoop = useCallback(async () => {
-    const imageBitmap = await createImageBitmap(video, {
-      imageOrientation: 'flipY',
-    })
-    const texture = new Texture(imageBitmap)
-    texture.needsUpdate = true
-
-    setAllTextures((prev) => [...prev, texture])
-  }, [video])
-
-  const videoIsValid = useCallback(() => {
-    return !video.paused && !video.ended && video.videoWidth !== 0 && video.videoHeight !== 0
-  }, [video])
-
-  useAnimationFrame(createFrameLoop, videoIsValid)
-
+  const offsetRef = useRef(0)
   const materialRefs = Array.from({ length: frameLimit }, () =>
     useRef<MeshStandardMaterial>(
       new MeshStandardMaterial({
@@ -45,19 +52,15 @@ export const SlitScanGroup = ({ video, width, height, depth, frameLimit, clipPla
   )
 
   useFrame(() => {
-    // if frames are not enough, fill with null frames
-    if (allTextures.length < frameLimit) {
-      materialRefs.forEach((ref, i) => {
-        if (i >= frameLimit - allTextures.length) {
-          ref.current.map = allTextures[i - (frameLimit - allTextures.length)]
-        }
-      })
-      return
+    if (allTextures.length === 0) return
+
+    if (video.paused || allTextures.length >= frameLimit) {
+      offsetRef.current = (offsetRef.current + 1) % allTextures.length
     }
 
-    frameIndex.current = (frameIndex.current + 1) % allTextures.length
     materialRefs.forEach((ref, i) => {
-      ref.current.map = allTextures[(frameIndex.current + i) % allTextures.length]
+      if (i >= allTextures.length) return
+      ref.current.map = allTextures[(i + offsetRef.current) % allTextures.length]
     })
   })
 
@@ -67,7 +70,7 @@ export const SlitScanGroup = ({ video, width, height, depth, frameLimit, clipPla
   return (
     <group>
       {materialRefs.map((ref, i) => (
-        <mesh key={ref.current.id} castShadow position={[0, 0, i * (depth / materialRefs.length)]}>
+        <mesh key={ref.current.id} castShadow position={[0, 0, depth - i * (depth / materialRefs.length)]}>
           <boxGeometry args={[width, height, depth]} />
           <meshStandardMaterial
             ref={ref}
