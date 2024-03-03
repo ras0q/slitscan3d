@@ -14,7 +14,7 @@ type SlitScanGroupProps = {
 export const SlitScanGroup = ({ video, width, height, depth, frameLimit, clipPlanes }: SlitScanGroupProps) => {
   if (!video) return null
 
-  const [allTextures, setAllTextures] = useState<Texture[]>([])
+  const [textures, setTextures] = useState<Texture[]>([])
   const reqIdRef = useRef(0)
 
   useEffect(() => {
@@ -25,7 +25,7 @@ export const SlitScanGroup = ({ video, width, height, depth, frameLimit, clipPla
       const texture = new Texture(imageBitmap)
       texture.needsUpdate = true
 
-      setAllTextures((prev) => (video.paused ? prev : [...prev, texture]))
+      setTextures((prev) => (video.paused ? prev : [...prev, texture]))
 
       if (video.paused) {
         video.cancelVideoFrameCallback(reqIdRef.current)
@@ -37,7 +37,7 @@ export const SlitScanGroup = ({ video, width, height, depth, frameLimit, clipPla
     reqIdRef.current = video.requestVideoFrameCallback(pushFrame)
 
     return () => {
-      allTextures.forEach((texture) => texture.dispose())
+      textures.forEach((texture) => texture.dispose())
       video.cancelVideoFrameCallback(reqIdRef.current)
     }
   }, [video])
@@ -52,15 +52,15 @@ export const SlitScanGroup = ({ video, width, height, depth, frameLimit, clipPla
   )
 
   useFrame(() => {
-    if (allTextures.length === 0) return
+    if (textures.length === 0) return
 
-    if (video.paused || allTextures.length >= frameLimit) {
-      offsetRef.current = (offsetRef.current + 1) % allTextures.length
+    if (video.paused || textures.length >= frameLimit) {
+      offsetRef.current = (offsetRef.current + 1) % textures.length
     }
 
     materialRefs.forEach((ref, i) => {
-      if (i >= allTextures.length) return
-      ref.current.map = allTextures[(i + offsetRef.current) % allTextures.length]
+      if (i >= textures.length) return
+      ref.current.map = textures[(i + offsetRef.current) % textures.length]
     })
   })
 
