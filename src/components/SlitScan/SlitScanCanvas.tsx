@@ -31,14 +31,16 @@ export const SlitScanCanvas = ({ video, x, y, z, d, axesHelperVisible }: SlitSca
       }}
       dpr={[1, 2]}
       shadows
+      flat
+      linear
       onCreated={(state: RootState) => {
         state.gl.localClippingEnabled = true
       }}
     >
       <axesHelper args={[depth * 2]} visible={axesHelperVisible} />
       <OrbitControls />
-      <ambientLight intensity={0.1} />
-      <directionalLight position={[5, 5, 5]} intensity={3} />
+      <ambientLight intensity={3} />
+      <directionalLight position={[width, height, depth * 5]} intensity={0.5} />
 
       <Suspense fallback={null}>
         <SlitScanGroup
