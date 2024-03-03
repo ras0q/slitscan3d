@@ -1,4 +1,4 @@
-import sampleVideo from '../assets/sample.mp4'
+import sampleVideo from '../assets/AdobeStock_255856560.mp4'
 import { Range } from './Menu/Range'
 import { SlitScanCanvas } from './SlitScan/SlitScanCanvas'
 import { ChangeEvent, useCallback, useState } from 'react'
