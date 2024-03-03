@@ -39,8 +39,8 @@ export const SlitScanCanvas = ({ video, x, y, z, d, axesHelperVisible }: SlitSca
     >
       <axesHelper args={[depth * 2]} visible={axesHelperVisible} />
       <OrbitControls />
-      <ambientLight intensity={3} />
-      <directionalLight position={[width, height, depth * 5]} intensity={0.5} />
+      <ambientLight intensity={2.5} />
+      <directionalLight position={[width, height, depth * 5]} intensity={1} />
 
       <Suspense fallback={null}>
         <SlitScanGroup
