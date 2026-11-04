@@ -29,7 +29,7 @@
     "eslint-plugin-react": "latest",
     "prettier": "^3.2.5",
     "typescript": "^5.3.3",
-    "vite": "^6.4.3"
+    "vite": "^6.4.5"
   },
   "engines": {
     "node": "20.x"
